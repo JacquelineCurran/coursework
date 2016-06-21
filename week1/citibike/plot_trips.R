@@ -7,6 +7,8 @@ library(dplyr)
 library(ggplot2)
 library(reshape)
 library(scales)
+library(tidyr)
+library(lubridate)
 
 # be picky about white backgrounds on our plots
 theme_set(theme_bw())
@@ -33,8 +35,21 @@ ggplot(trips, aes(x=trips$ymd)) + geom_bar()
 
 # plot the number of trips by gender and age
 
+<<<<<<< HEAD
 gender_age <- group_by(trips, birth_year, gender) %>% summarize( total = n())
 ggplot(gender_age, aes(x=birth_year, y= total, color = as.factor(gender))) + geom_point() + ylim(0,150000)
+=======
+# plot the ratio of male to female trips by age
+# hint: use the spread() function to reshape things to make it easier to compute this ratio
+
+########################################
+# plot weather data
+########################################
+# plot the minimum temperature over each day
+
+# plot the minimum temperature and maximum temperature over each day
+# hint: try using the gather() function for this to reshape things before plotting
+>>>>>>> b0e97ba359543f8ea145161c401a113bbaf3e3e7
 
 ########################################
 # plot trip and weather data
@@ -43,10 +58,13 @@ ggplot(gender_age, aes(x=birth_year, y= total, color = as.factor(gender))) + geo
 # join trips and weather
 trips_with_weather <- inner_join(trips, weather, by="ymd")
 
+<<<<<<< HEAD
 # plot the minimum temperature over each day
 
 ggplot(trips_with_weather, aes(x= ymd, y= tmin)) + geom_point()
 
+=======
+>>>>>>> b0e97ba359543f8ea145161c401a113bbaf3e3e7
 # plot the number of trips as a function of the minimum temperature, where each point represents a day
 # you'll need to summarize the trips and join to the weather data to do this
 
@@ -63,8 +81,11 @@ mutate(trips_with_weather, prcp >= 8, high_prcp)
 
 # add a smoothed fit on top of the previous plot, using geom_smooth
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> b0e97ba359543f8ea145161c401a113bbaf3e3e7
 # compute the average number of trips and standard deviation in number of trips by hour of the day
 # hint: use the hour() function from the lubridate package
 
@@ -72,5 +93,8 @@ mutate(trips_with_weather, prcp >= 8, high_prcp)
 
 # repeat this, but now split the results by day of the week (Monday, Tuesday, ...) or weekday vs. weekend days
 # hint: use the wday() function from the lubridate package
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> b0e97ba359543f8ea145161c401a113bbaf3e3e7
