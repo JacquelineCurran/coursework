@@ -7,8 +7,6 @@ library(dplyr)
 library(ggplot2)
 library(reshape)
 library(scales)
-library(tidyr)
-library(lubridate)
 
 # be picky about white backgrounds on our plots
 theme_set(theme_bw())
@@ -35,21 +33,13 @@ ggplot(trips, aes(x=trips$ymd)) + geom_bar()
 
 # plot the number of trips by gender and age
 
-<<<<<<< HEAD
 gender_age <- group_by(trips, birth_year, gender) %>% summarize( total = n())
 ggplot(gender_age, aes(x=birth_year, y= total, color = as.factor(gender))) + geom_point() + ylim(0,150000)
-=======
-# plot the ratio of male to female trips by age
-# hint: use the spread() function to reshape things to make it easier to compute this ratio
 
-########################################
-# plot weather data
-########################################
-# plot the minimum temperature over each day
+#plot the ratio of male to female trips by age
+#hint use the spread() function to reshape things to make it easier to compute this ratio
 
-# plot the minimum temperature and maximum temperature over each day
-# hint: try using the gather() function for this to reshape things before plotting
->>>>>>> b0e97ba359543f8ea145161c401a113bbaf3e3e7
+
 
 ########################################
 # plot trip and weather data
@@ -58,13 +48,10 @@ ggplot(gender_age, aes(x=birth_year, y= total, color = as.factor(gender))) + geo
 # join trips and weather
 trips_with_weather <- inner_join(trips, weather, by="ymd")
 
-<<<<<<< HEAD
 # plot the minimum temperature over each day
 
 ggplot(trips_with_weather, aes(x= ymd, y= tmin)) + geom_point()
 
-=======
->>>>>>> b0e97ba359543f8ea145161c401a113bbaf3e3e7
 # plot the number of trips as a function of the minimum temperature, where each point represents a day
 # you'll need to summarize the trips and join to the weather data to do this
 
@@ -75,26 +62,41 @@ ggplot(ntrip, aes(x=tmin, y=total, color= as.factor(ymd))) + geom_point()
 # you'll need to decide what constitutes "substantial precipitation" and create a new T/F column to indicate this
 #prcp>8
 
-mutate(trips_with_weather, prcp >= 8, high_prcp)
 
-
+precipitation<- group_by(trips_with_weather, tmin, ymd) %>% filter(prcp >=8) %>% summarize(total=n())
+View(precipitation)
+ggplot(ntrip, aes(x=tmin, y=total, color=as.factor(ymd))) + geom_point()
 
 # add a smoothed fit on top of the previous plot, using geom_smooth
+ntrip <- group_by(trips_with_weather, tmin, ymd) %>% summarize(total = n())
+ggplot(ntrip, aes(x=tmin, y=total, color= as.factor(ymd))) + geom_point() + geom_smooth()
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> b0e97ba359543f8ea145161c401a113bbaf3e3e7
 # compute the average number of trips and standard deviation in number of trips by hour of the day
 # hint: use the hour() function from the lubridate package
 
-# plot the above
+install.packages("lubridate")
+library(lubridate)
+
+Time <- format(as.POSIXct(strptime(trips_with_weather$starttime,"%Y-%m-%d %H:%M:%S",tz="")) ,format = "%H:%M:%S")
+trips_with_weather$time <- Time
+View(trips_with_weather)
+
+hour <-format(as.POSIXct(strptime(trips_with_weather$time,"%H:%M:%S",tz="")) ,format = "%H")
+trips_with_weather$hour <- hour
+View(trips_with_weather)
+
+by_hour <- group_by(trips_with_weather, hour, ymd) %>% summarize(total = n()) %>% ungroup () %>% group_by(hour) %>% summarize(average = mean(total), standard_deviation = sd(total))
+View(by_hour)
+
+#plot this
+ggplot(by_hour, aes(x=hour, y=average)) + geom_point()
+ggplot(by_hour, aes(x=hour, y=standard_deviation)) + geom_point()
+
 
 # repeat this, but now split the results by day of the week (Monday, Tuesday, ...) or weekday vs. weekend days
 # hint: use the wday() function from the lubridate package
-<<<<<<< HEAD
+trips_with_weather$day <- wday(trips_with_weather$ymd)
+View(trips_with_weather)
 
-
-=======
->>>>>>> b0e97ba359543f8ea145161c401a113bbaf3e3e7
+#IDK how to do because IDK how to do the las two
