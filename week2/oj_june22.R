@@ -165,5 +165,10 @@ summary(model1)
   
     #ii. Now add in all the demographics. What is the regular R-squared on training data? 
   #What is the honest R-squared on the test set?
-        #On the training data it was 0.5398
-        #The honest Rwquared on the test set was 0.5179023
+    model6 <- lm(logmove ~ brand*log(price)*feat+AGE60+EDUC+ETHNIC+INCOME, data = Ojtrain)
+    summary(model6)
+        #On the training data it was 0.5701
+        #The honest Rsquared on the test set was 0.5597025
+    predicted_sales6 <- predict(model6, OJtest)
+    cor(predicted_sales6, OJtest$logmove)^2
+      
