@@ -1,4 +1,4 @@
-load("trips_model.RData")
+load("trips_model.Rdata")
 
 library(dplyr)
 library(ggplot2)
@@ -21,32 +21,24 @@ weather2015 <- tbl_df(weather2015)
 library(lubridate)
 weather2015$day_of_week <- wday(weather2015$ymd)
 weather2015 <- mutate(weather2015, day_of_week=factor(day_of_week, levels = c(1:7), labels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")))
-View(weather2015)
 
 # if weekend
 weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
 weather2015$weekend <- factor((weather2015$day_of_week %in% weekdays), 
                                       levels=c(TRUE, FALSE), labels=c('0', '1'))
 
-
 #holidays
 holidays_2015 <- c("20151126", "20151224", "20151225")
 trips_holiday_2015 <- mutate(weather2015, is_holiday = date %in% holidays_2015)
-weather2015$is_holiday <- trips_holiday_2015$is_holiday
+weather2015$is_holiday <- as.numeric(trips_holiday_2015$is_holiday)
 
 #extreme_prcp
-trips2015_extreme <- if trips2015_precip > 2, TRUE
+extreme_prcp <- mutate (weather2015, extreme_prcp = prcp > 2)
+weather2015$extreme_prcp <- as.numeric(extreme_prcp$extreme_prcp)
 
 #med_prcp
+med_prcp <- mutate (weather2015, med_prcp = prcp >0 & prcp < 2)
+weather2015$med_prcp <- as.numeric(med_prcp$med_prcp)
 
 #predict
-##newdata##$predicted <- predict(model, ##new data##)
-
-#find the Rsquared value
-cor(#newdata#$count, ##newdata##$predicted)^2
-  
-  
-  #calculate RMSE
-  #newdata#$RMSE <- (#newdata#$count - #newdata#$predicted)^2
-  #newdata#_RMSE <- sqrt(mean(##newdata##$RMSE))
-  #newdata#_RMSE
+weather2015$predicted <- predict(model, weather2015)
