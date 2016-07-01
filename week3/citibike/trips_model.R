@@ -1,4 +1,4 @@
-load("trips_model.RData")
+load("trips_model.Rdata")
 
 library(dplyr)
 library(ggplot2)
